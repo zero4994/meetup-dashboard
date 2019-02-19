@@ -1,6 +1,7 @@
 const express = require("express");
 const app = require("./app.js")();
 const path = require("path");
+console.log("this is the key", process.env);
 
 //app.use(express.static(path.resolve(__dirname, ".", "dist")));
 

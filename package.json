@@ -5,13 +5,29 @@
   "dependencies": {
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
+<<<<<<< HEAD
+    "react-scripts": "2.1.5",
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+=======
     "react-scripts": "2.1.5"
+>>>>>>> a1b23b96d299c815ff48ee47c93a09c22bc091e4
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+<<<<<<< HEAD
+    "eject": "react-scripts eject",
+    "back": "node server/index.js",
+    "dev": "nodemon server/index.js"
+=======
     "eject": "react-scripts eject"
+>>>>>>> a1b23b96d299c815ff48ee47c93a09c22bc091e4
   },
   "eslintConfig": {
     "extends": "react-app"

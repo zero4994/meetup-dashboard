@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import {} from "./action";
+import { selectCountry, renderCities } from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Select from "react-select";
+import countries from "./assets/countries";
+import axios from "axios";
 
 import Typography from "@material-ui/core/Typography";
 import NoSsr from "@material-ui/core/NoSsr";
@@ -11,7 +13,6 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
-import countries from "./assets/countries";
 
 const suggestions = countries.map((country) => ({
   value: country.name,
@@ -172,14 +173,9 @@ const components = {
 };
 
 class SearchFilterBar extends React.Component {
-  state = {
-    single: null,
-  };
-
-  handleChange = (name) => (value) => {
-    this.setState({
-      [name]: value,
-    });
+  handleChange = () => (value) => {
+    this.props.selectCountry(value);
+    // axios.get("/api/cities/:country")
   };
 
   render() {
@@ -203,8 +199,8 @@ class SearchFilterBar extends React.Component {
             styles={selectStyles}
             options={suggestions}
             components={components}
-            value={this.state.single}
-            onChange={this.handleChange("single")}
+            value={this.props.country}
+            onChange={this.handleChange()}
             placeholder="Search a country"
             isClearable
           />
@@ -213,8 +209,8 @@ class SearchFilterBar extends React.Component {
             classes={classes}
             styles={selectStyles}
             components={components}
-            value={this.state.single}
-            onChange={this.handleChange("single")}
+            value={this.props.country}
+            onChange={this.handleChange()}
             placeholder="Search a city"
             isClearable
           />
@@ -230,9 +226,21 @@ SearchFilterBar.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({ test: state.test });
+const mapStateToProps = (state) => ({
+  country: state.country,
+  cities: state.cities,
+});
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  selectCountry: (country) => {
+    const action = selectCountry(country);
+    dispatch(action);
+  },
+  renderCities: (cities) => {
+    const action = renderCities(cities);
+    dispatch(action);
+  },
+});
 
 export default connect(
   mapStateToProps,

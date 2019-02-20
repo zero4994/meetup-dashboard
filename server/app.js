@@ -53,14 +53,15 @@ const initializeServer = () => {
       const country = req.params.country;
       const year = new Date().getFullYear();
 
-      unirest.get(`https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`)
-      .header("X-RapidAPI-Key", process.env.API_KEY)
-      .end(function (result) {
-        // console.log(result.status, result.headers, result.body);
-        res.json(result);
-      });
-
-
+      unirest
+        .get(
+          `https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`
+        )
+        .header("X-RapidAPI-Key", process.env.API_KEY)
+        .end(function(result) {
+          console.log(result.body);
+          res.json(result.body.response.holidays || []);
+        });
     } catch (error) {
       console.log(error);
       res.sendStatus(500);

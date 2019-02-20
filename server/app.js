@@ -22,7 +22,19 @@ const initializeServer = () => {
         method: "get"
       });
       console.log(`Found ${data.meta.count} events`);
-      res.json(data);
+
+      const results = data.results.map(meetup => {
+        return {
+          photo_url: meetup.photo_url,
+          name: meetup.name,
+          venue: meetup.venue,
+          description: meetup.description,
+          yes_rsvp_count: meetup.yes_rsvp_count,
+          event_url: meetup.event_url,
+          time: meetup.time
+        };
+      });
+      res.json(results);
     } catch (error) {
       console.error(error);
       res.sendStatus(500);

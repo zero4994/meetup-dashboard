@@ -1,25 +1,25 @@
 import React, { Component } from "react";
-import "./App.css";
 import { connect } from "react-redux";
 import {} from "./action";
 import { withStyles } from "@material-ui/core/styles";
-import Navbar from "./Navbar";
-import SearchFilterBar from "./SearchFilterBar";
-import EventCard from "./EventCard";
+import PropTypes from "prop-types";
 
-const styles = (theme) => ({});
+const styles = {};
 
-class App extends Component {
+class EventCard extends Component {
   render() {
+    const { classes } = this.props;
     return (
-      <div className="App">
-        <Navbar />
-        <SearchFilterBar />
-        <EventCard />
+      <div>
+        <h1>Event Card</h1>
       </div>
     );
   }
 }
+
+EventCard.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => ({ test: state.test });
 
@@ -28,4 +28,4 @@ const mapDispatchToProps = (dispatch) => ({});
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(App));
+)(withStyles(styles)(EventCard));

@@ -1,6 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
-//const unirest = require("unirest");
+const unirest = require("unirest");
 const axios = require("axios");
 
 const initializeServer = () => {
@@ -46,6 +46,26 @@ const initializeServer = () => {
       res.sendStatus(500);
     }
     //res.sendStatus(200);
+  });
+
+  app.get("/api/holidays/:country", async (req, res) => {
+    try {
+      const country = req.params.country;
+      const year = new Date().getFullYear();
+
+      unirest
+        .get(
+          `https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`
+        )
+        .header("X-RapidAPI-Key", process.env.API_KEY)
+        .end(function(result) {
+          console.log(result.body);
+          res.json(result.body.response.holidays || []);
+        });
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
   });
 
   return app;

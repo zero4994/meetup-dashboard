@@ -23,8 +23,23 @@ const initializeServer = () => {
     }
   });
 
-  app.get("/app/cities", async (req, res) => {
-    res.sendStatus(200);
+  app.get("/api/cities/:country", async (req, res) => {
+    const country = req.params.country;
+    console.log(`Getting all cities for ${country}`);
+    try {
+      const { data } = await axios({
+        url: `https://api.meetup.com/2/cities?country=${country}`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+    //res.sendStatus(200);
   });
 
   return app;

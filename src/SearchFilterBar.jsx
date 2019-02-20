@@ -13,29 +13,29 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import countries from "./assets/countries";
 
-const suggestions = countries.map((country) => ({
+const suggestions = countries.map(country => ({
   value: country.name,
-  label: country.name,
+  label: country.name
 }));
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 250,
+    height: 250
   },
   input: {
     display: "flex",
-    padding: 0,
+    padding: 0
   },
   valueContainer: {
     display: "flex",
     flexWrap: "wrap",
     flex: 1,
     alignItems: "center",
-    overflow: "hidden",
+    overflow: "hidden"
   },
   chip: {
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`
   },
   chipFocused: {
     backgroundColor: emphasize(
@@ -43,29 +43,29 @@ const styles = (theme) => ({
         ? theme.palette.grey[300]
         : theme.palette.grey[700],
       0.08
-    ),
+    )
   },
   noOptionsMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
   },
   singleValue: {
-    fontSize: 16,
+    fontSize: 16
   },
   placeholder: {
     position: "absolute",
     left: 2,
-    fontSize: 16,
+    fontSize: 16
   },
   paper: {
     position: "absolute",
     zIndex: 1,
     marginTop: theme.spacing.unit,
     left: 0,
-    right: 0,
+    right: 0
   },
   divider: {
-    height: 0,
-  },
+    height: 0
+  }
 });
 
 function NoOptionsMessage(props) {
@@ -94,8 +94,8 @@ function Control(props) {
           className: props.selectProps.classes.input,
           inputRef: props.innerRef,
           children: props.children,
-          ...props.innerProps,
-        },
+          ...props.innerProps
+        }
       }}
       {...props.selectProps.textFieldProps}
     />
@@ -109,7 +109,7 @@ function Option(props) {
       selected={props.isFocused}
       component="div"
       style={{
-        fontWeight: props.isSelected ? 500 : 400,
+        fontWeight: props.isSelected ? 500 : 400
       }}
       {...props.innerProps}
     >
@@ -168,17 +168,17 @@ const components = {
   Option,
   Placeholder,
   SingleValue,
-  ValueContainer,
+  ValueContainer
 };
 
 class SearchFilterBar extends React.Component {
   state = {
-    single: null,
+    single: null
   };
 
-  handleChange = (name) => (value) => {
+  handleChange = name => value => {
     this.setState({
-      [name]: value,
+      [name]: value
     });
   };
 
@@ -186,13 +186,13 @@ class SearchFilterBar extends React.Component {
     const { classes, theme } = this.props;
 
     const selectStyles = {
-      input: (base) => ({
+      input: base => ({
         ...base,
         color: theme.palette.text.primary,
         "& input": {
-          font: "inherit",
-        },
-      }),
+          font: "inherit"
+        }
+      })
     };
 
     return (
@@ -227,12 +227,12 @@ class SearchFilterBar extends React.Component {
 
 SearchFilterBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({ test: state.test });
+const mapStateToProps = state => ({ test: state.test });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,

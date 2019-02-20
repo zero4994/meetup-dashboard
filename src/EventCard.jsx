@@ -48,6 +48,7 @@ const styles = theme => ({
 class EventCard extends Component {
   //if we are going to add expand functionality, we need to add the function below.
   //However, since it needs to be tied to the state, I'm just gonna comment it out for now.
+  //Making another comment because I need to commit and push this thing to understand where the hell it is going wrng.
 
   // handleExpandClick = () => {
   //   this.setState(state => ({ expand: !state.expanded }))
@@ -69,7 +70,7 @@ class EventCard extends Component {
         />
         <CardMedia
           className={classes.media}
-          image="https://secure.meetupstatic.com/photos/event/3/3/c/3/global_478213251.jpeg"
+          image="/static/images/dbag.jpg"
           title="Mad Lad"
         />
         <CardContent>

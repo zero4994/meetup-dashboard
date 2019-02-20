@@ -1,6 +1,7 @@
 const initialState = {
   country: null,
   cities: [],
+  selectedCity: null,
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -18,8 +19,17 @@ const reducer = (state = initialState, action) => {
         ...stateChanges,
       };
     }
+    case "SELECT_CITY": {
+      const stateChanges = { selectedCity: action.city };
+      return {
+        ...state,
+        ...stateChanges,
+      };
+    }
+    default: {
+      return state;
+    }
   }
-  return state;
 };
 
 export default reducer;

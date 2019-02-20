@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectCountry, renderCities } from "./action";
+import { selectCountry, renderCities, selectCity } from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Select from "react-select";
@@ -174,11 +174,28 @@ const components = {
 };
 
 class SearchFilterBar extends React.Component {
-  handleChange = () => async (value) => {
+  handleSelectCountry = () => async (value) => {
     await this.props.selectCountry(value);
     axios
-      .get(`/api/cities/${this.props.country.code}`)
-      .then((countries) => console.log(countries));
+      .get(`/api/cities/${await this.props.country.code}`)
+      .then((countries) =>
+        countries.data.results.map((obj) => ({
+          label: `${obj.city}${obj.state ? ", " + obj.state : ""}`,
+          city: obj.city,
+          state: obj.state,
+          lat: obj.lat,
+          lon: obj.lon,
+          country: obj.localized_country_name,
+          countryCode: obj.country,
+        }))
+      )
+      .then((cities) => {
+        this.props.renderCities(cities);
+      });
+  };
+  handleSelectCity = () => async (value) => {
+    await this.props.selectCity(value);
+    console.log(this.props.selectedCity);
   };
 
   render() {
@@ -203,7 +220,7 @@ class SearchFilterBar extends React.Component {
             options={suggestions}
             components={components}
             value={this.props.country}
-            onChange={this.handleChange()}
+            onChange={this.handleSelectCountry()}
             placeholder="Search a country"
             isClearable
           />
@@ -212,8 +229,9 @@ class SearchFilterBar extends React.Component {
             classes={classes}
             styles={selectStyles}
             components={components}
-            value={this.props.country}
-            onChange={this.handleChange()}
+            options={this.props.cities}
+            value={this.props.selectedCity}
+            onChange={this.handleSelectCity()}
             placeholder="Search a city"
             isClearable
           />
@@ -232,6 +250,7 @@ SearchFilterBar.propTypes = {
 const mapStateToProps = (state) => ({
   country: state.country,
   cities: state.cities,
+  selectedCity: state.selectedCity,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -241,6 +260,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   renderCities: (cities) => {
     const action = renderCities(cities);
+    dispatch(action);
+  },
+  selectCity: (city) => {
+    const action = selectCity(city);
     dispatch(action);
   },
 });

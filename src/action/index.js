@@ -11,4 +11,11 @@ const renderCities = (cities) => {
   };
 };
 
-module.exports = { selectCountry };
+const selectCity = (city) => {
+  return {
+    type: "SELECT_CITY",
+    city,
+  };
+};
+
+module.exports = { selectCountry, renderCities, selectCity };

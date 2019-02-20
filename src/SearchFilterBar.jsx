@@ -17,6 +17,7 @@ import { emphasize } from "@material-ui/core/styles/colorManipulator";
 const suggestions = countries.map((country) => ({
   value: country.name,
   label: country.name,
+  code: country.code,
 }));
 
 const styles = (theme) => ({
@@ -173,9 +174,11 @@ const components = {
 };
 
 class SearchFilterBar extends React.Component {
-  handleChange = () => (value) => {
-    this.props.selectCountry(value);
-    // axios.get("/api/cities/:country")
+  handleChange = () => async (value) => {
+    await this.props.selectCountry(value);
+    axios
+      .get(`/api/cities/${this.props.country.code}`)
+      .then((countries) => console.log(countries));
   };
 
   render() {

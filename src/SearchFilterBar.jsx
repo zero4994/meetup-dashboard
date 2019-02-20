@@ -195,7 +195,15 @@ class SearchFilterBar extends React.Component {
   };
   handleSelectCity = () => async (value) => {
     await this.props.selectCity(value);
-    console.log(this.props.selectedCity);
+    axios
+      .get(
+        `/api/meetups/${this.props.selectedCity.countryCode}/${
+          this.props.selectedCity.city
+        }`
+      )
+      .then((results) => {
+        console.log(results);
+      });
   };
 
   render() {

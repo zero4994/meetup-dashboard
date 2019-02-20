@@ -2,7 +2,6 @@ const express = require("express");
 const app = require("./app.js")();
 const path = require("path");
 require("dotenv").config();
-console.log("this is the key", process.env.MEETUP_KEY);
 
 //app.use(express.static(path.resolve(__dirname, ".", "dist")));
 

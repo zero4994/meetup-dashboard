@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {} from "./action";
+import moment from "moment";
+import moment_timezone from "moment-timezone";
+import tzlookup from "tz-lookup";
 import { withStyles, createMuiTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import classnames from "classnames";
@@ -21,11 +24,14 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const styles = (theme) => ({
   card: {
-    maxWidth: 400,
+    maxWidth: "100%",
   },
   media: {
-    height: 0,
+    height: 250,
     paddingtop: "56.25%", //16:9 ratio
+    marginTop: "30",
+    width: "80%",
+    marginLeft: "10%",
   },
   actions: {
     display: "flex",
@@ -56,6 +62,18 @@ class EventCard extends Component {
 
   render() {
     const { classes } = this.props;
+    const meetupTimezone =
+      tzlookup(this.props.selectedCity.lat, this.props.selectedCity.lon) ||
+      null;
+    const time = this.props.meetup.time;
+    const timezoneAdjustment = moment_timezone
+      .tz(time, meetupTimezone)
+      .format();
+    const formatted = moment(timezoneAdjustment).format(
+      "MMMM Do YYYY, HH:mm:ss"
+    );
+
+    // const imgSrc = this.props.meetup["photos_url"];
     return (
       <Card className={classes.card}>
         <CardHeader
@@ -65,16 +83,18 @@ class EventCard extends Component {
               <MoreVertIcon />
             </IconButton>
           }
-          title="Meet Your Best Freakin Friend"
-          subheader="April 1st, 20never"
+          title={this.props.meetup.name}
+          subheader={formatted}
         />
         <CardMedia
           className={classes.media}
-          image="/static/images/dbag.jpg"
+          image={this.props.meetup["photo_url"]}
           title="Mad Lad"
         />
         <CardContent>
-          <Typography component="p">{this.props.meetup.description}</Typography>
+          <Typography noWrap="true" component="p">
+            {this.props.meetup.description}
+          </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton aria-label="Add to favorites">
@@ -129,7 +149,7 @@ EventCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({ test: state.test });
+const mapStateToProps = (state) => ({ selectedCity: state.selectedCity });
 
 const mapDispatchToProps = (dispatch) => ({});
 

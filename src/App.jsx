@@ -15,13 +15,13 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <SearchFilterBar />
-        <EventCard />
+        {this.props.meetupCards}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({ test: state.test });
+const mapStateToProps = (state) => ({ meetupCards: state.meetupCards });
 
 const mapDispatchToProps = (dispatch) => ({});
 

@@ -18,4 +18,24 @@ const selectCity = (city) => {
   };
 };
 
-module.exports = { selectCountry, renderCities, selectCity };
+const storeMeetups = (meetups) => {
+  return {
+    type: "STORE_MEETUPS",
+    meetups,
+  };
+};
+
+const renderMeetups = (meetupCards) => {
+  return {
+    type: "RENDER_MEETUPS",
+    meetupCards,
+  };
+};
+
+module.exports = {
+  selectCountry,
+  renderCities,
+  selectCity,
+  storeMeetups,
+  renderMeetups,
+};

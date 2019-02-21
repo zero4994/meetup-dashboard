@@ -2,6 +2,8 @@ const initialState = {
   country: null,
   cities: [],
   selectedCity: null,
+  meetups: [],
+  meetupCards: [],
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -21,6 +23,20 @@ const reducer = (state = initialState, action) => {
     }
     case "SELECT_CITY": {
       const stateChanges = { selectedCity: action.city };
+      return {
+        ...state,
+        ...stateChanges,
+      };
+    }
+    case "STORE_MEETUPS": {
+      const stateChanges = { meetups: action.meetups };
+      return {
+        ...state,
+        ...stateChanges,
+      };
+    }
+    case "RENDER_MEETUPS": {
+      const stateChanges = { meetupCards: action.meetupCards };
       return {
         ...state,
         ...stateChanges,

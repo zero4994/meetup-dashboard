@@ -1,6 +1,13 @@
 import React from "react";
+import EventCard from "./EventCard";
 import { connect } from "react-redux";
-import { selectCountry, renderCities, selectCity } from "./action";
+import {
+  selectCountry,
+  renderCities,
+  selectCity,
+  storeMeetups,
+  renderMeetups,
+} from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Select from "react-select";
@@ -195,7 +202,24 @@ class SearchFilterBar extends React.Component {
   };
   handleSelectCity = () => async (value) => {
     await this.props.selectCity(value);
-    console.log(this.props.selectedCity);
+    axios
+      .get(
+        `/api/meetups/${this.props.selectedCity.countryCode}/${
+          this.props.selectedCity.city
+        }`
+      )
+      .then(async (results) => {
+        await this.props.storeMeetups(results.data);
+        return this.props.meetups;
+      })
+      .then((meetups) => {
+        console.log(meetups);
+        this.props.renderMeetups(
+          meetups.map((meetup) => {
+            return <EventCard meetup={meetup} />;
+          })
+        );
+      });
   };
 
   render() {
@@ -251,6 +275,7 @@ const mapStateToProps = (state) => ({
   country: state.country,
   cities: state.cities,
   selectedCity: state.selectedCity,
+  meetups: state.meetups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -264,6 +289,14 @@ const mapDispatchToProps = (dispatch) => ({
   },
   selectCity: (city) => {
     const action = selectCity(city);
+    dispatch(action);
+  },
+  storeMeetups: (meetups) => {
+    const action = storeMeetups(meetups);
+    dispatch(action);
+  },
+  renderMeetups: (meetups) => {
+    const action = renderMeetups(meetups);
     dispatch(action);
   },
 });

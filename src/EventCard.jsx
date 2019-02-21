@@ -25,6 +25,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 const styles = (theme) => ({
   card: {
     maxWidth: "100%",
+    marginTop: "15px",
   },
   media: {
     height: 250,
@@ -72,8 +73,18 @@ class EventCard extends Component {
     const formatted = moment(timezoneAdjustment).format(
       "MMMM Do YYYY, HH:mm:ss"
     );
+    const showCardMedia = () => {
+      if (this.props.meetup.hasOwnProperty("photo_url")) {
+        return (
+          <CardMedia
+            className={classes.media}
+            image={this.props.meetup["photo_url"]}
+            title="Mad Lad"
+          />
+        );
+      }
+    };
 
-    // const imgSrc = this.props.meetup["photos_url"];
     return (
       <Card className={classes.card}>
         <CardHeader
@@ -84,16 +95,16 @@ class EventCard extends Component {
             </IconButton>
           }
           title={this.props.meetup.name}
-          subheader={formatted}
+          subheader={
+            this.props.meetup.isHoliday === true
+              ? `HOLIDAY - ${formatted}`
+              : formatted
+          }
         />
-        <CardMedia
-          className={classes.media}
-          image={this.props.meetup["photo_url"]}
-          title="Mad Lad"
-        />
+        {showCardMedia()}
         <CardContent>
-          <Typography noWrap="true" component="p">
-            {this.props.meetup.description}
+          <Typography className="truncate" noWrap="true" component="p">
+            {this.props.description}
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>

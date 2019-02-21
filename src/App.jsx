@@ -8,19 +8,19 @@ import SearchFilterBar from "./SearchFilterBar";
 import EventCard from "./EventCard";
 import Grid from "@material-ui/core/Grid";
 
-const styles = (theme) => ({});
+const styles = theme => ({});
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      holidaysOrWeekendsOnly: false,
+      holidaysOrWeekendsOnly: false
     };
   }
   handleClick = () => {
     console.log(this.state);
     this.setState({
-      holidaysOrWeekendsOnly: !this.state.holidaysOrWeekendsOnly,
+      holidaysOrWeekendsOnly: !this.state.holidaysOrWeekendsOnly
     });
   };
   render() {
@@ -29,7 +29,7 @@ class App extends Component {
       <div className="App">
         <Navbar />
 
-        <Grid container fluid="true" spacing={6} className="padding-top-2">
+        <Grid container fluid="true" spacing={0} className="padding-top-2">
           <Grid item md={3}>
             <SearchFilterBar toggle={this.handleClick} />
           </Grid>
@@ -51,12 +51,12 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   meetupCards: state.meetupCards,
-  holidayOrWeekendMeetups: state.holidayOrWeekendMeetups,
+  holidayOrWeekendMeetups: state.holidayOrWeekendMeetups
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,

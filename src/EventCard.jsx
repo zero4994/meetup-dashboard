@@ -11,12 +11,12 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import red from "@material-ui/core/colors/red";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({
   card: {
@@ -24,11 +24,14 @@ const styles = theme => ({
     marginTop: "15px"
   },
   media: {
-    height: 250,
-    paddingtop: "56.25%", //16:9 ratio
-    marginTop: "30",
-    width: "80%",
-    marginLeft: "10%"
+    // height: 250,
+    // paddingtop: "56.25%", //16:9 ratio
+    // marginTop: "30",
+    // width: "80%",
+    // marginLeft: "10%"
+    height: 0,
+    //paddingTop: "56.25%", // 16:9,
+    marginTop: "30"
   },
   actions: {
     display: "flex"
@@ -66,30 +69,48 @@ class EventCard extends Component {
     const { classes } = this.props;
     const time = this.props.meetup.time;
     const formatted = moment(time).format("MMMM Do YYYY, HH:mm:ss");
+    const subHeader = ` - ${this.props.meetup.yes_rsvp_count} people going`;
+    const address = this.props.meetup.venue
+      ? ` ${this.props.meetup.venue.address_1}, ${
+          this.props.meetup.venue.city
+        }, ${this.props.meetup.venue.country}`
+      : "";
     const showCardMedia = () => {
       if (this.props.meetup.hasOwnProperty("photo_url")) {
         return (
-          <CardMedia
-            className={classes.media}
-            image={this.props.meetup["photo_url"]}
-            title="Mad Lad"
+          // <CardMedia
+          //   component="img"
+          //   className={classes.media}
+          //   src={this.props.meetup["photo_url"]}
+          //   title="Mad Lad"
+          // />
+          <img
+            src={this.props.meetup["photo_url"]}
+            alt=""
+            style={{ margin: "auto" }}
           />
         );
       }
     };
-
     return (
       <Card className={classes.card}>
-        <CardHeader
-          // avatar={<Avatar aria-label="Meet Ups" className={classes.avatar} />}
-          title={this.props.meetup.name}
-          subheader={
-            this.props.meetup.isHolidayOrWeekend === true
-              ? `HOLIDAY - ${formatted}`
-              : formatted
-          }
-        />
-        {showCardMedia()}
+        <Grid container fluid="true" spacing={0} className="padding-top-2">
+          <Grid item md={3}>
+            {showCardMedia()}
+          </Grid>
+          <Grid item md={8}>
+            <CardHeader
+              // avatar={<Avatar aria-label="Meet Ups" className={classes.avatar} />}
+              title={this.props.meetup.name}
+              subheader={`${
+                this.props.meetup.isHolidayOrWeekend === true
+                  ? `HOLIDAY - ${formatted}`
+                  : formatted
+              }${subHeader}`}
+            />
+          </Grid>
+        </Grid>
+
         <CardContent>
           <Typography className="truncate" noWrap="true" component="p">
             {this.props.description}
@@ -111,34 +132,34 @@ class EventCard extends Component {
         {/* Commenting out the component below because it is content for the expanded card */}
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>Method:</Typography>
-            <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron
-              and set aside for 10 minutes.
-            </Typography>
-            <Typography paragraph>
-              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-              over medium-high heat. Add chicken, shrimp and chorizo, and cook,
-              stirring occasionally until lightly browned, 6 to 8 minutes.
-              Transfer shrimp to a large plate and set aside, leaving chicken
-              and chorizo in the pan. Add pimentón, bay leaves, garlic,
-              tomatoes, onion, salt and pepper, and cook, stirring often until
-              thickened and fragrant, about 10 minutes. Add saffron broth and
-              remaining 4 1/2 cups chicken broth; bring to a boil.
-            </Typography>
-            <Typography paragraph>
-              Add rice and stir very gently to distribute. Top with artichokes
-              and peppers, and cook without stirring, until most of the liquid
-              is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add
-              reserved shrimp and mussels, tucking them down into the rice, and
-              cook again without stirring, until mussels have opened and rice is
-              just tender, 5 to 7 minutes more. (Discard any mussels that don’t
-              open.)
-            </Typography>
-            <Typography>
-              Set aside off of the heat to let rest for 10 minutes, and then
-              serve.
-            </Typography>
+            <div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: this.props.meetup.description
+                }}
+              />
+              <Divider />
+              <div style={{ "padding-top": "1rem" }}>
+                <strong>Where</strong>
+                <div style={{ "margin-left": "2rem" }}>
+                  <p>
+                    Address:
+                    <span style={{ color: "rgba(0, 0, 0, 0.54)" }}>
+                      {address}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div style={{ "padding-top": "1rem" }}>
+                <strong>Event URL</strong>
+                <div style={{ "margin-left": "2rem" }}>
+                  <br />
+                  <a href={this.props.meetup.event_url}>
+                    {this.props.meetup.event_url}
+                  </a>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Collapse>
       </Card>

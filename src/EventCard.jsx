@@ -19,35 +19,36 @@ import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
-const styles = theme => ({
+const styles = (theme) => ({
   card: {
-    maxWidth: 400
+    maxWidth: 400,
   },
   media: {
     height: 0,
-    paddingtop: "56.25%" //16:9 ratio
+    paddingtop: "56.25%", //16:9 ratio
   },
   actions: {
-    display: "flex"
+    display: "flex",
   },
   expland: {
     transform: "rotate(0deg)",
     marginLeft: "auto",
     transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    })
+      duration: theme.transitions.duration.shortest,
+    }),
   },
   expandOpen: {
-    transform: "rotate(180deg)"
+    transform: "rotate(180deg)",
   },
   avatar: {
-    backgroundColor: red[500]
-  }
+    backgroundColor: red[500],
+  },
 });
 
 class EventCard extends Component {
   //if we are going to add expand functionality, we need to add the function below.
   //However, since it needs to be tied to the state, I'm just gonna comment it out for now.
+  //Making another comment because I need to commit and push this thing to understand where the hell it is going wrng.
 
   // handleExpandClick = () => {
   //   this.setState(state => ({ expand: !state.expanded }))
@@ -69,17 +70,11 @@ class EventCard extends Component {
         />
         <CardMedia
           className={classes.media}
-          image="https://secure.meetupstatic.com/photos/event/3/3/c/3/global_478213251.jpeg"
+          image="/static/images/dbag.jpg"
           title="Mad Lad"
         />
         <CardContent>
-          <Typography component="p">
-            This is where the specific description of the Meet Ups are supposed
-            to go. But for the time being this will be a description on how
-            douche the guys in the picture look. The male components in the
-            picture above are the reason why Nsync gets hatred after all these
-            years of their retirement.
-          </Typography>
+          <Typography component="p">{this.props.meetup.description}</Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton aria-label="Add to favorites">
@@ -131,12 +126,12 @@ class EventCard extends Component {
 }
 
 EventCard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({ test: state.test });
+const mapStateToProps = (state) => ({ test: state.test });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(
   mapStateToProps,

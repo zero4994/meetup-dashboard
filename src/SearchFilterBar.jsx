@@ -1,6 +1,13 @@
 import React from "react";
+import EventCard from "./EventCard";
 import { connect } from "react-redux";
-import { selectCountry, renderCities } from "./action";
+import {
+  selectCountry,
+  renderCities,
+  selectCity,
+  storeMeetups,
+  renderMeetups,
+} from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Select from "react-select";
@@ -17,6 +24,7 @@ import { emphasize } from "@material-ui/core/styles/colorManipulator";
 const suggestions = countries.map((country) => ({
   value: country.name,
   label: country.name,
+  code: country.code,
 }));
 
 const styles = (theme) => ({
@@ -173,9 +181,44 @@ const components = {
 };
 
 class SearchFilterBar extends React.Component {
-  handleChange = () => (value) => {
-    this.props.selectCountry(value);
-    // axios.get("/api/cities/:country")
+  handleSelectCountry = () => async (value) => {
+    await this.props.selectCountry(value);
+    axios
+      .get(`/api/cities/${await this.props.country.code}`)
+      .then((countries) =>
+        countries.data.results.map((obj) => ({
+          label: `${obj.city}${obj.state ? ", " + obj.state : ""}`,
+          city: obj.city,
+          state: obj.state,
+          lat: obj.lat,
+          lon: obj.lon,
+          country: obj.localized_country_name,
+          countryCode: obj.country,
+        }))
+      )
+      .then((cities) => {
+        this.props.renderCities(cities);
+      });
+  };
+  handleSelectCity = () => async (value) => {
+    await this.props.selectCity(value);
+    axios
+      .get(
+        `/api/meetups/${this.props.selectedCity.countryCode}/${
+          this.props.selectedCity.city
+        }`
+      )
+      .then(async (results) => {
+        await this.props.storeMeetups(results.data);
+        return this.props.meetups;
+      })
+      .then((meetups) => {
+        this.props.renderMeetups(
+          meetups.map((meetup) => {
+            return <EventCard meetup={meetup} />;
+          })
+        );
+      });
   };
 
   render() {
@@ -200,7 +243,7 @@ class SearchFilterBar extends React.Component {
             options={suggestions}
             components={components}
             value={this.props.country}
-            onChange={this.handleChange()}
+            onChange={this.handleSelectCountry()}
             placeholder="Search a country"
             isClearable
           />
@@ -209,8 +252,9 @@ class SearchFilterBar extends React.Component {
             classes={classes}
             styles={selectStyles}
             components={components}
-            value={this.props.country}
-            onChange={this.handleChange()}
+            options={this.props.cities}
+            value={this.props.selectedCity}
+            onChange={this.handleSelectCity()}
             placeholder="Search a city"
             isClearable
           />
@@ -229,6 +273,8 @@ SearchFilterBar.propTypes = {
 const mapStateToProps = (state) => ({
   country: state.country,
   cities: state.cities,
+  selectedCity: state.selectedCity,
+  meetups: state.meetups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -238,6 +284,18 @@ const mapDispatchToProps = (dispatch) => ({
   },
   renderCities: (cities) => {
     const action = renderCities(cities);
+    dispatch(action);
+  },
+  selectCity: (city) => {
+    const action = selectCity(city);
+    dispatch(action);
+  },
+  storeMeetups: (meetups) => {
+    const action = storeMeetups(meetups);
+    dispatch(action);
+  },
+  renderMeetups: (meetups) => {
+    const action = renderMeetups(meetups);
     dispatch(action);
   },
 });

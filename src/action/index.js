@@ -11,4 +11,31 @@ const renderCities = (cities) => {
   };
 };
 
-module.exports = { selectCountry };
+const selectCity = (city) => {
+  return {
+    type: "SELECT_CITY",
+    city,
+  };
+};
+
+const storeMeetups = (meetups) => {
+  return {
+    type: "STORE_MEETUPS",
+    meetups,
+  };
+};
+
+const renderMeetups = (meetupCards) => {
+  return {
+    type: "RENDER_MEETUPS",
+    meetupCards,
+  };
+};
+
+module.exports = {
+  selectCountry,
+  renderCities,
+  selectCity,
+  storeMeetups,
+  renderMeetups,
+};

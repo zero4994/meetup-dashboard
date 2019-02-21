@@ -111,7 +111,7 @@ const initializeServer = () => {
   });
 
   // weather(for 5days forecasts)
-  app.get("/api/weather/:country/:city", async (req, res) => {
+  app.get("/api/weather/:country/:city", (req, res) => {
     const country = req.params.country;
     const city = req.params.city;
 

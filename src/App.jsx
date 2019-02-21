@@ -7,6 +7,7 @@ import Navbar from "./Navbar";
 import SearchFilterBar from "./SearchFilterBar";
 import EventCard from "./EventCard";
 import Grid from "@material-ui/core/Grid";
+import Weather from "./WeatherComponent";
 
 const styles = theme => ({});
 
@@ -32,6 +33,7 @@ class App extends Component {
         <Grid container fluid="true" spacing={0} className="padding-top-2">
           <Grid item md={3}>
             <SearchFilterBar toggle={this.handleClick} />
+            <Weather />
           </Grid>
           <Grid item md={8}>
             {this.state.holidaysOrWeekendsOnly === true

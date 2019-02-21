@@ -38,6 +38,13 @@ const renderHolidaysOrWeekendMeetups = (holidayOrWeekendMeetups) => {
     holidayOrWeekendMeetups,
   };
 };
+const storeWeather = (weather) => {
+  console.log(`=========redux action========`,weather)
+  return {
+    type: "STORE_WEATHER",
+    weather,
+  }
+}
 
 module.exports = {
   selectCountry,
@@ -46,4 +53,5 @@ module.exports = {
   storeMeetups,
   renderMeetups,
   renderHolidaysOrWeekendMeetups,
+  storeWeather,
 };

@@ -20,6 +20,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
+import "./SearchFilterBar.css";
 
 const suggestions = countries.map(country => ({
   value: country.name,
@@ -30,7 +31,7 @@ const suggestions = countries.map(country => ({
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginBottom: "2rem"
+    margin: "1rem 1rem 2rem 1rem"
   },
   input: {
     display: "flex",
@@ -236,31 +237,33 @@ class SearchFilterBar extends React.Component {
     };
 
     return (
-      <div className={classes.root}>
-        <NoSsr>
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            options={suggestions}
-            components={components}
-            value={this.props.country}
-            onChange={this.handleSelectCountry()}
-            placeholder="Search a country"
-            isClearable
-          />
-          <div className={classes.divider} />
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            components={components}
-            options={this.props.cities}
-            value={this.props.selectedCity}
-            onChange={this.handleSelectCity()}
-            placeholder="Search a city"
-            isClearable
-          />
-          <div className={classes.divider} />
-        </NoSsr>
+      <div className="search-bar">
+        <div className={classes.root}>
+          <NoSsr>
+            <Select
+              classes={classes}
+              styles={selectStyles}
+              options={suggestions}
+              components={components}
+              value={this.props.country}
+              onChange={this.handleSelectCountry()}
+              placeholder="Search a country"
+              isClearable
+            />
+            <div className={classes.divider} />
+            <Select
+              classes={classes}
+              styles={selectStyles}
+              components={components}
+              options={this.props.cities}
+              value={this.props.selectedCity}
+              onChange={this.handleSelectCity()}
+              placeholder="Search a city"
+              isClearable
+            />
+            <div className={classes.divider} />
+          </NoSsr>
+        </div>
       </div>
     );
   }

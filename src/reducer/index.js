@@ -48,6 +48,10 @@ const reducer = (state = initialState, action) => {
       const stateChanges = {
         holidayOrWeekendMeetups: action.holidayOrWeekendMeetups,
       };
+      return {
+        ...state,
+        ...stateChanges
+      }
     }
     case "STORE_WEATHER": {
       const stateChanges = { weather: action.weather };

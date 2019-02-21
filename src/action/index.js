@@ -32,10 +32,18 @@ const renderMeetups = (meetupCards) => {
   };
 };
 
+const renderHolidaysOrWeekendMeetups = (holidayOrWeekendMeetups) => {
+  return {
+    type: "HOLIDAYS_ONLY",
+    holidayOrWeekendMeetups,
+  };
+};
+
 module.exports = {
   selectCountry,
   renderCities,
   selectCity,
   storeMeetups,
   renderMeetups,
+  renderHolidaysOrWeekendMeetups,
 };

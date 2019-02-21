@@ -4,6 +4,7 @@ const initialState = {
   selectedCity: null,
   meetups: [],
   meetupCards: [],
+  holidayOrWeekendMeetups: [],
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -37,6 +38,15 @@ const reducer = (state = initialState, action) => {
     }
     case "RENDER_MEETUPS": {
       const stateChanges = { meetupCards: action.meetupCards };
+      return {
+        ...state,
+        ...stateChanges,
+      };
+    }
+    case "HOLIDAYS_ONLY": {
+      const stateChanges = {
+        holidayOrWeekendMeetups: action.holidayOrWeekendMeetups,
+      };
       return {
         ...state,
         ...stateChanges,

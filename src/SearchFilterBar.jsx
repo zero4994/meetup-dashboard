@@ -6,7 +6,8 @@ import {
   renderCities,
   selectCity,
   storeMeetups,
-  renderMeetups
+  renderMeetups,
+  renderHolidaysOrWeekendMeetups,
 } from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -21,31 +22,32 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import "./SearchFilterBar.css";
+import Button from "@material-ui/core/Button";
 
-const suggestions = countries.map(country => ({
+const suggestions = countries.map((country) => ({
   value: country.name,
   label: country.name,
-  code: country.code
+  code: country.code,
 }));
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
-    marginBottom: "2rem"
+    marginBottom: "2rem",
   },
   input: {
     display: "flex",
-    padding: 0
+    padding: 0,
   },
   valueContainer: {
     display: "flex",
     flexWrap: "wrap",
     flex: 1,
     alignItems: "center",
-    overflow: "hidden"
+    overflow: "hidden",
   },
   chip: {
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`
+    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
   },
   chipFocused: {
     backgroundColor: emphasize(
@@ -53,29 +55,32 @@ const styles = theme => ({
         ? theme.palette.grey[300]
         : theme.palette.grey[700],
       0.08
-    )
+    ),
   },
   noOptionsMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   singleValue: {
-    fontSize: 16
+    fontSize: 16,
   },
   placeholder: {
     position: "absolute",
     left: 2,
-    fontSize: 16
+    fontSize: 16,
   },
   paper: {
     position: "absolute",
     zIndex: 1,
     marginTop: theme.spacing.unit,
     left: 0,
-    right: 0
+    right: 0,
   },
   divider: {
-    height: 0
-  }
+    height: 0,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 function NoOptionsMessage(props) {
@@ -104,8 +109,8 @@ function Control(props) {
           className: props.selectProps.classes.input,
           inputRef: props.innerRef,
           children: props.children,
-          ...props.innerProps
-        }
+          ...props.innerProps,
+        },
       }}
       {...props.selectProps.textFieldProps}
     />
@@ -119,7 +124,7 @@ function Option(props) {
       selected={props.isFocused}
       component="div"
       style={{
-        fontWeight: props.isSelected ? 500 : 400
+        fontWeight: props.isSelected ? 500 : 400,
       }}
       {...props.innerProps}
     >
@@ -178,31 +183,38 @@ const components = {
   Option,
   Placeholder,
   SingleValue,
-  ValueContainer
+  ValueContainer,
 };
 
 class SearchFilterBar extends React.Component {
-  handleSelectCountry = () => async value => {
+  handleSelectCountry = () => async (value) => {
     await this.props.selectCountry(value);
     axios
       .get(`/api/cities/${await this.props.country.code}`)
-      .then(countries =>
-        countries.data.results.map(obj => ({
+      .then((countries) =>
+        countries.data.results.map((obj) => ({
           label: `${obj.city}${obj.state ? ", " + obj.state : ""}`,
           city: obj.city,
           state: obj.state,
           lat: obj.lat,
           lon: obj.lon,
           country: obj.localized_country_name,
-          countryCode: obj.country
+          countryCode: obj.country,
         }))
       )
-      .then(cities => {
+      .then((cities) => {
         this.props.renderCities(cities);
       });
   };
-  handleSelectCity = () => async value => {
-    await this.props.selectCity(value);
+  handleInputCity = () => async (value) => {
+    try {
+      await this.props.selectCity(value);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  handleSelectCity = () => async () => {
+    //console.log("event=>", value);
     const query = this.props.selectedCity.state
       ? `?state=${this.props.selectedCity.state}`
       : "";
@@ -212,16 +224,22 @@ class SearchFilterBar extends React.Component {
           this.props.selectedCity.city
         }${query}`
       )
-      .then(async results => {
+      .then(async (results) => {
         await this.props.storeMeetups(results.data);
         return this.props.meetups;
       })
-      .then(meetups => {
-        console.log(meetups.filter(meetups => meetups.isHoliday));
+      .then((meetups) => {
         this.props.renderMeetups(
-          meetups.map(meetup => {
+          meetups.map((meetup) => {
             return <EventCard meetup={meetup} />;
           })
+        );
+        this.props.renderHolidaysOrWeekendMeetups(
+          meetups
+            .filter((meetup) => meetup.isHolidayOrWeekend)
+            .map((meetup) => {
+              return <EventCard meetup={meetup} />;
+            })
         );
       });
   };
@@ -230,13 +248,13 @@ class SearchFilterBar extends React.Component {
     const { classes, theme } = this.props;
 
     const selectStyles = {
-      input: base => ({
+      input: (base) => ({
         ...base,
         color: theme.palette.text.primary,
         "& input": {
-          font: "inherit"
-        }
-      })
+          font: "inherit",
+        },
+      }),
     };
 
     return (
@@ -260,13 +278,27 @@ class SearchFilterBar extends React.Component {
               components={components}
               options={this.props.cities}
               value={this.props.selectedCity}
-              onChange={this.handleSelectCity()}
               placeholder="Search a city"
               isClearable
+              onChange={this.handleInputCity()}
             />
             <div className={classes.divider} />
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={this.handleSelectCity()}
+            >
+              Search
+            </Button>
           </NoSsr>
         </div>
+        <Button
+          variant="primary"
+          className={classes.button}
+          onClick={() => this.props.toggle()}
+        >
+          Holidays Or Weekends Only
+        </Button>
       </div>
     );
   }
@@ -274,37 +306,41 @@ class SearchFilterBar extends React.Component {
 
 SearchFilterBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   country: state.country,
   cities: state.cities,
   selectedCity: state.selectedCity,
-  meetups: state.meetups
+  meetups: state.meetups,
 });
 
-const mapDispatchToProps = dispatch => ({
-  selectCountry: country => {
+const mapDispatchToProps = (dispatch) => ({
+  selectCountry: (country) => {
     const action = selectCountry(country);
     dispatch(action);
   },
-  renderCities: cities => {
+  renderCities: (cities) => {
     const action = renderCities(cities);
     dispatch(action);
   },
-  selectCity: city => {
+  selectCity: (city) => {
     const action = selectCity(city);
     dispatch(action);
   },
-  storeMeetups: meetups => {
+  storeMeetups: (meetups) => {
     const action = storeMeetups(meetups);
     dispatch(action);
   },
-  renderMeetups: meetups => {
+  renderMeetups: (meetups) => {
     const action = renderMeetups(meetups);
     dispatch(action);
-  }
+  },
+  renderHolidaysOrWeekendMeetups: (meetups) => {
+    const action = renderHolidaysOrWeekendMeetups(meetups);
+    dispatch(action);
+  },
 });
 
 export default connect(

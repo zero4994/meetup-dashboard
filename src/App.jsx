@@ -7,20 +7,21 @@ import Navbar from "./Navbar";
 import SearchFilterBar from "./SearchFilterBar";
 import EventCard from "./EventCard";
 import Grid from "@material-ui/core/Grid";
+import Weather from "./WeatherComponent";
 
-const styles = (theme) => ({});
+const styles = theme => ({});
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      holidaysOrWeekendsOnly: false,
+      holidaysOrWeekendsOnly: false
     };
   }
   handleClick = () => {
     console.log(this.state);
     this.setState({
-      holidaysOrWeekendsOnly: !this.state.holidaysOrWeekendsOnly,
+      holidaysOrWeekendsOnly: !this.state.holidaysOrWeekendsOnly
     });
   };
   render() {
@@ -29,9 +30,10 @@ class App extends Component {
       <div className="App">
         <Navbar />
 
-        <Grid container fluid="true" spacing={6} className="padding-top-2">
+        <Grid container fluid="true" spacing={0} className="padding-top-2">
           <Grid item md={3}>
             <SearchFilterBar toggle={this.handleClick} />
+            <Weather />
           </Grid>
           <Grid item md={8}>
             {this.state.holidaysOrWeekendsOnly === true
@@ -39,24 +41,17 @@ class App extends Component {
               : this.props.meetupCards}
           </Grid>
         </Grid>
-        {/* <Grid container spacing={24}>
-          <Grid item md />
-          <Grid item md={8}>
-            
-          </Grid>
-          <Grid item md />
-        </Grid> */}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   meetupCards: state.meetupCards,
-  holidayOrWeekendMeetups: state.holidayOrWeekendMeetups,
+  holidayOrWeekendMeetups: state.holidayOrWeekendMeetups
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,

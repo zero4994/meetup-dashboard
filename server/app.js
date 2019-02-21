@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const unirest = require("unirest");
 const axios = require("axios");
 
-const getHolidayByCountry = (country) => {
+const getHolidayByCountry = country => {
   //const country = req.params.country;
   const year = new Date().getFullYear();
 
@@ -21,8 +21,8 @@ const getHolidayByCountry = (country) => {
     url: `https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`,
     method: "get",
     headers: {
-      "X-RapidAPI-Key": process.env.API_KEY,
-    },
+      "X-RapidAPI-Key": process.env.API_KEY
+    }
   });
 };
 
@@ -42,18 +42,18 @@ const initializeServer = () => {
         url: `https://api.meetup.com/2/open_events.json?country=${country}&city=${city}${optional}&key=${
           process.env.MEETUP_KEY
         }`,
-        method: "get",
+        method: "get"
       });
       console.log(`Found ${data.meta.count} events`);
 
       const holidays = await getHolidayByCountry(country);
-      const parsedHolidays = holidays.data.response.holidays.map((day) => {
+      const parsedHolidays = holidays.data.response.holidays.map(day => {
         return day.date.datetime;
       });
 
-      const results = data.results.map((meetup) => {
+      const results = data.results.map(meetup => {
         const meetUpDate = new Date(meetup.time);
-        const isHolidayOrWeekend = parsedHolidays.filter((holiday) => {
+        const isHolidayOrWeekend = parsedHolidays.filter(holiday => {
           return (
             (holiday.month === meetUpDate.getMonth() + 1 &&
               holiday.day === meetUpDate.getDate()) ||
@@ -69,7 +69,7 @@ const initializeServer = () => {
           yes_rsvp_count: meetup.yes_rsvp_count,
           event_url: meetup.event_url,
           time: meetup.time,
-          isHolidayOrWeekend: isHolidayOrWeekend.length > 0,
+          isHolidayOrWeekend: isHolidayOrWeekend.length > 0
         };
       });
       res.json(results);
@@ -87,8 +87,8 @@ const initializeServer = () => {
         url: `https://api.meetup.com/2/cities?country=${country}`,
         method: "get",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
       res.json(data);
     } catch (error) {
@@ -126,7 +126,7 @@ const initializeServer = () => {
           // console.log(result.body.list);
           let resultObject = {};
           let resultForecast = [];
-          for (key in result.body.list) {
+          for (let key in result.body.list) {
             // console.log(result.body.list[key].dt_txt, result.body.list[key].weather);
             if (result.body.list[key].dt_txt.endsWith("12:00:00")) {
               resultObject = {
@@ -134,7 +134,7 @@ const initializeServer = () => {
                 wether_id: result.body.list[key].weather[0].id,
                 weather_group: result.body.list[key].weather[0].main,
                 description: result.body.list[key].weather[0].description,
-                icon: result.body.list[key].weather[0].icon,
+                icon: result.body.list[key].weather[0].icon
               };
               resultForecast.push(resultObject);
             }

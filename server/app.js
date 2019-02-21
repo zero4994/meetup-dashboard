@@ -3,6 +3,29 @@ const morgan = require("morgan");
 const unirest = require("unirest");
 const axios = require("axios");
 
+const getHolidayByCountry = country => {
+  //const country = req.params.country;
+  const year = new Date().getFullYear();
+
+  // unirest
+  //   .get(
+  //     `https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`
+  //   )
+  //   .header("X-RapidAPI-Key", process.env.API_KEY)
+  //   .end(function(result) {
+  //     console.log(result.body);
+  //     //res.json(result.body.response.holidays || []);
+  //   });
+
+  return axios({
+    url: `https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`,
+    method: "get",
+    headers: {
+      "X-RapidAPI-Key": process.env.API_KEY
+    }
+  });
+};
+
 const initializeServer = () => {
   const app = express();
   app.use(morgan("combined"));
@@ -22,7 +45,34 @@ const initializeServer = () => {
         method: "get"
       });
       console.log(`Found ${data.meta.count} events`);
-      res.json(data);
+
+      const holidays = await getHolidayByCountry(country);
+      const parsedHolidays = holidays.data.response.holidays.map(day => {
+        return day.date.datetime;
+      });
+
+      const results = data.results.map(meetup => {
+        const meetUpDate = new Date(meetup.time);
+        const isHoliday = parsedHolidays
+          .filter(holiday => {
+            return holiday.month === meetUpDate.getMonth() + 1;
+          })
+          .filter(holiday => {
+            return holiday.day === meetUpDate.getDate();
+          });
+
+        return {
+          photo_url: meetup.photo_url,
+          name: meetup.name,
+          venue: meetup.venue,
+          description: meetup.description,
+          yes_rsvp_count: meetup.yes_rsvp_count,
+          event_url: meetup.event_url,
+          time: meetup.time,
+          isHoliday: isHoliday.length > 0
+        };
+      });
+      res.json(results);
     } catch (error) {
       console.error(error);
       res.sendStatus(500);
@@ -51,17 +101,9 @@ const initializeServer = () => {
   app.get("/api/holidays/:country", async (req, res) => {
     try {
       const country = req.params.country;
-      const year = new Date().getFullYear();
-
-      unirest
-        .get(
-          `https://calendarific.p.rapidapi.com/holidays?year=${year}&country=${country}`
-        )
-        .header("X-RapidAPI-Key", process.env.API_KEY)
-        .end(function(result) {
-          console.log(result.body);
-          res.json(result.body.response.holidays || []);
-        });
+      const { data } = await getHolidayByCountry(country);
+      console.log(data.response.holidays);
+      res.json(data.response.holidays);
     } catch (error) {
       console.log(error);
       res.sendStatus(500);

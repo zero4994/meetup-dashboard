@@ -44,7 +44,8 @@ const reducer = (state = initialState, action) => {
       };
     }
     case "STORE_WEATHER": {
-      const stateChanges = { storeWeather: action.storeWeather };
+      const stateChanges = { weather: action.weather };
+      console.log(`==========weather reducer======`, action)
       return {
         ...state,
         ...stateChanges,

@@ -6,7 +6,8 @@ import {
   renderCities,
   selectCity,
   storeMeetups,
-  renderMeetups
+  renderMeetups,
+  storeWeather
 } from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -224,23 +225,40 @@ class SearchFilterBar extends React.Component {
           })
         );
       });
-  };
-  getWeatherInfo = () => async (value) => {
-    await this.props.selectCity(value);
-    const query = this.props.selectedCity.state
-      ? `?state=${this.props.selectedCity.state}`
-      : "";
     axios
       .get(
         `/api/weather/${this.props.selectedCity.countryCode}/${
           this.props.selectedCity.city
-        }${query}`
+        }`
       )
       .then(async (results) => {
+        console.log("=====before await====", results);
         await this.props.storeWeather(results.data);
+        console.log(`=======after the await=======`, this.props.weather)
         return this.props.weather;
-      });
-  }
+      })
+      .then(() => {
+        console.log(this.props.weather);
+      })
+
+  };
+  // getWeatherInfo = () => async (value) => {
+  //   await this.props.selectCity(value);
+  //   const query = this.props.selectedCity.state
+  //     ? `?state=${this.props.selectedCity.state}`
+  //     : "";
+  //   axios
+  //     .get(
+  //       `/api/weather/${this.props.selectedCity.countryCode}/${
+  //         this.props.selectedCity.city
+  //       }${query}`
+  //     )
+  //     .then(async (results) => {
+  //       console.log("this is results", results);
+  //       await this.props.storeWeather(results.data);
+  //       return this.props.weather;
+  //     });
+  // }
 
 
   render() {
@@ -298,7 +316,8 @@ const mapStateToProps = state => ({
   country: state.country,
   cities: state.cities,
   selectedCity: state.selectedCity,
-  meetups: state.meetups
+  meetups: state.meetups,
+  weather: state.weather
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -320,6 +339,10 @@ const mapDispatchToProps = dispatch => ({
   },
   renderMeetups: meetups => {
     const action = renderMeetups(meetups);
+    dispatch(action);
+  },
+  storeWeather: weather => {
+    const action = storeWeather(weather);
     dispatch(action);
   }
 });

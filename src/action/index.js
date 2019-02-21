@@ -33,6 +33,7 @@ const renderMeetups = (meetupCards) => {
 };
 
 const storeWeather = (weather) => {
+  console.log(`=========redux action========`,weather)
   return {
     type: "STORE_WEATHER",
     weather,

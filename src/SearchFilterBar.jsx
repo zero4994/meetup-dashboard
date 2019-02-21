@@ -7,6 +7,7 @@ import {
   selectCity,
   storeMeetups,
   renderMeetups,
+  renderHolidaysOrWeekendMeetups,
 } from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -228,11 +229,17 @@ class SearchFilterBar extends React.Component {
         return this.props.meetups;
       })
       .then((meetups) => {
-        console.log(meetups.filter((meetups) => meetups.isHoliday));
         this.props.renderMeetups(
           meetups.map((meetup) => {
             return <EventCard meetup={meetup} />;
           })
+        );
+        this.props.renderHolidaysOrWeekendMeetups(
+          meetups
+            .filter((meetup) => meetup.isHolidayOrWeekend)
+            .map((meetup) => {
+              return <EventCard meetup={meetup} />;
+            })
         );
       });
   };
@@ -275,7 +282,6 @@ class SearchFilterBar extends React.Component {
               isClearable
               onChange={this.handleInputCity()}
             />
-            {/* onChange={this.handleSelectCity()} */}
             <div className={classes.divider} />
             <Button
               variant="contained"
@@ -286,6 +292,13 @@ class SearchFilterBar extends React.Component {
             </Button>
           </NoSsr>
         </div>
+        <Button
+          variant="primary"
+          className={classes.button}
+          onClick={() => this.props.toggle()}
+        >
+          Holidays Or Weekends Only
+        </Button>
       </div>
     );
   }
@@ -322,6 +335,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   renderMeetups: (meetups) => {
     const action = renderMeetups(meetups);
+    dispatch(action);
+  },
+  renderHolidaysOrWeekendMeetups: (meetups) => {
+    const action = renderHolidaysOrWeekendMeetups(meetups);
     dispatch(action);
   },
 });

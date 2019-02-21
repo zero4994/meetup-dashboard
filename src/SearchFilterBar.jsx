@@ -213,6 +213,7 @@ class SearchFilterBar extends React.Component {
         return this.props.meetups;
       })
       .then((meetups) => {
+        console.log(meetups);
         this.props.renderMeetups(
           meetups.map((meetup) => {
             return <EventCard meetup={meetup} />;

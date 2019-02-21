@@ -15,6 +15,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
+
         <Grid container spacing={24} className="padding-top-2">
           <Grid item md />
           <Grid item md={8}>
@@ -25,7 +26,7 @@ class App extends Component {
         <Grid container spacing={24}>
           <Grid item md />
           <Grid item md={8}>
-            <EventCard />
+            {this.props.meetupCards}
           </Grid>
           <Grid item md />
         </Grid>
@@ -34,7 +35,7 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({ test: state.test });
+const mapStateToProps = state => ({ meetupCards: state.meetupCards });
 
 const mapDispatchToProps = dispatch => ({});
 

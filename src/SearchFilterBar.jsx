@@ -224,6 +224,23 @@ class SearchFilterBar extends React.Component {
         );
       });
   };
+  getWeatherInfo = () => async (value) => {
+    await this.props.selectCity(value);
+    const query = this.props.selectedCity.state
+      ? `?state=${this.props.selectedCity.state}`
+      : "";
+    axios
+      .get(
+        `/api/weather/${this.props.selectedCity.countryCode}/${
+          this.props.selectedCity.city
+        }${query}`
+      )
+      .then(async (results) => {
+        await this.props.storeWeather(results.data);
+        return this.props.weather;
+      });
+  }
+
 
   render() {
     const { classes, theme } = this.props;

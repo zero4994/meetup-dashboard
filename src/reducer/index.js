@@ -4,6 +4,7 @@ const initialState = {
   selectedCity: null,
   meetups: [],
   meetupCards: [],
+  weather: []
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -37,6 +38,13 @@ const reducer = (state = initialState, action) => {
     }
     case "RENDER_MEETUPS": {
       const stateChanges = { meetupCards: action.meetupCards };
+      return {
+        ...state,
+        ...stateChanges,
+      };
+    }
+    case "STORE_WEATHER": {
+      const stateChanges = { storeWeather: action.storeWeather };
       return {
         ...state,
         ...stateChanges,

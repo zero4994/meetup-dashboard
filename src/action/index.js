@@ -32,10 +32,18 @@ const renderMeetups = (meetupCards) => {
   };
 };
 
+const storeWeather = (weather) => {
+  return {
+    type: "STORE_WEATHER",
+    weather,
+  }
+}
+
 module.exports = {
   selectCountry,
   renderCities,
   selectCity,
   storeMeetups,
   renderMeetups,
+  storeWeather,
 };

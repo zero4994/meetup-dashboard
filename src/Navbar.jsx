@@ -5,22 +5,20 @@ import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import PropTypes from "prop-types";
+import Polymer from "@material-ui/icons/Polymer";
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 0.02
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20,
-  },
+    marginRight: 20
+  }
 };
 
 class Navbar extends Component {
@@ -28,19 +26,18 @@ class Navbar extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="secondary">
           <Toolbar>
-            <IconButton
-              className={classes.menuButton}
+            <Polymer fontSize={"large"} />
+            <Typography
+              variant="h5"
               color="inherit"
-              aria-label="Menu"
+              className={classes.grow}
+              fontFamily="Monospace"
+              fontSize="h6.fontSize"
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              Meetups
+              <b>Meetups Dashboard</b>
             </Typography>
-            <Button color="inherit">Login</Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -49,12 +46,12 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({ test: state.test });
+const mapStateToProps = state => ({ test: state.test });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,

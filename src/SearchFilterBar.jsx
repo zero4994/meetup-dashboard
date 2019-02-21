@@ -21,6 +21,7 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import "./SearchFilterBar.css";
+import Button from "@material-ui/core/Button";
 
 const suggestions = countries.map((country) => ({
   value: country.name,
@@ -75,6 +76,9 @@ const styles = (theme) => ({
   },
   divider: {
     height: 0,
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
 });
 
@@ -201,8 +205,15 @@ class SearchFilterBar extends React.Component {
         this.props.renderCities(cities);
       });
   };
-  handleSelectCity = () => async (value) => {
-    await this.props.selectCity(value);
+  handleInputCity = () => async (value) => {
+    try {
+      await this.props.selectCity(value);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  handleSelectCity = () => async () => {
+    //console.log("event=>", value);
     const query = this.props.selectedCity.state
       ? `?state=${this.props.selectedCity.state}`
       : "";
@@ -260,11 +271,19 @@ class SearchFilterBar extends React.Component {
               components={components}
               options={this.props.cities}
               value={this.props.selectedCity}
-              onChange={this.handleSelectCity() || null}
               placeholder="Search a city"
               isClearable
+              onChange={this.handleInputCity()}
             />
+            {/* onChange={this.handleSelectCity()} */}
             <div className={classes.divider} />
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={this.handleSelectCity()}
+            >
+              Search
+            </Button>
           </NoSsr>
         </div>
       </div>

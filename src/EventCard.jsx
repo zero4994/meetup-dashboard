@@ -68,16 +68,14 @@ class EventCard extends Component {
 
   render() {
     const { classes } = this.props;
-    const meetupTimezone =
-      tzlookup(this.props.selectedCity.lat, this.props.selectedCity.lon) ||
-      null;
+    // const meetupTimezone =
+    //   tzlookup(this.props.selectedCity.lat, this.props.selectedCity.lon) ||
+    //   null;
     const time = this.props.meetup.time;
-    const timezoneAdjustment = moment_timezone
-      .tz(time, meetupTimezone)
-      .format();
-    const formatted = moment(timezoneAdjustment).format(
-      "MMMM Do YYYY, HH:mm:ss"
-    );
+    // const timezoneAdjustment = moment_timezone
+    //   .tz(time /*, meetupTimezone*/)
+    //   .format();
+    const formatted = moment(time).format("MMMM Do YYYY, HH:mm:ss");
     const showCardMedia = () => {
       if (this.props.meetup.hasOwnProperty("photo_url")) {
         return (

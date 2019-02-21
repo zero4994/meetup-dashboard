@@ -30,7 +30,7 @@ const suggestions = countries.map((country) => ({
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
-    height: 250,
+    marginBottom: "2rem",
   },
   input: {
     display: "flex",
@@ -202,18 +202,21 @@ class SearchFilterBar extends React.Component {
   };
   handleSelectCity = () => async (value) => {
     await this.props.selectCity(value);
+    const query = this.props.selectedCity.state
+      ? `?state=${this.props.selectedCity.state}`
+      : "";
     axios
       .get(
         `/api/meetups/${this.props.selectedCity.countryCode}/${
           this.props.selectedCity.city
-        }`
+        }${query}`
       )
       .then(async (results) => {
         await this.props.storeMeetups(results.data);
         return this.props.meetups;
       })
       .then((meetups) => {
-        console.log(meetups);
+        console.log(meetups.filter((meetups) => meetups.isHoliday));
         this.props.renderMeetups(
           meetups.map((meetup) => {
             return <EventCard meetup={meetup} />;

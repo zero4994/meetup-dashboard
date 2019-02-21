@@ -23,6 +23,24 @@
   color: #61dafb;
 }
 
+.padding-top-2 {
+  /* padding-top: 2rem; */
+  padding: 2rem;
+}
+
+.padding-bottom-2 {
+  padding-bottom: 2rem;
+}
+
+.search-bar {
+  background-color: #e0ecff;
+  -webkit-box-shadow: 2px 2px 13px 0px rgba(0, 0, 0, 0.63);
+  -moz-box-shadow: 2px 2px 13px 0px rgba(0, 0, 0, 0.63);
+  box-shadow: 2px 2px 13px 0px rgba(0, 0, 0, 0.63);
+  border-radius: 18px;
+  /* margin-left: 10rem; */
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

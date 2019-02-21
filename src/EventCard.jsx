@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {} from "./action";
 import moment from "moment";
-import moment_timezone from "moment-timezone";
-import tzlookup from "tz-lookup";
-import { withStyles, createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import Card from "@material-ui/core/Card";
@@ -18,38 +16,36 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import red from "@material-ui/core/colors/red";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 
-const styles = (theme) => ({
+const styles = theme => ({
   card: {
     maxWidth: "100%",
-    marginTop: "15px",
+    marginTop: "15px"
   },
   media: {
     height: 250,
     paddingtop: "56.25%", //16:9 ratio
     marginTop: "30",
     width: "80%",
-    marginLeft: "10%",
+    marginLeft: "10%"
   },
   actions: {
-    display: "flex",
+    display: "flex"
   },
   expand: {
     transform: "rotate(0deg)",
     marginLeft: "auto",
     transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
+      duration: theme.transitions.duration.shortest
+    })
   },
   expandOpen: {
-    transform: "rotate(180deg)",
+    transform: "rotate(180deg)"
   },
   avatar: {
-    backgroundColor: red[500],
-  },
+    backgroundColor: red[500]
+  }
 });
 
 class EventCard extends Component {
@@ -59,22 +55,16 @@ class EventCard extends Component {
   constructor() {
     super();
     this.state = {
-      expanded: false,
+      expanded: false
     };
   }
   handleExpandClick = () => {
-    this.setState((state) => ({ expanded: !state.expanded }));
+    this.setState(state => ({ expanded: !state.expanded }));
   };
 
   render() {
     const { classes } = this.props;
-    // const meetupTimezone =
-    //   tzlookup(this.props.selectedCity.lat, this.props.selectedCity.lon) ||
-    //   null;
     const time = this.props.meetup.time;
-    // const timezoneAdjustment = moment_timezone
-    //   .tz(time /*, meetupTimezone*/)
-    //   .format();
     const formatted = moment(time).format("MMMM Do YYYY, HH:mm:ss");
     const showCardMedia = () => {
       if (this.props.meetup.hasOwnProperty("photo_url")) {
@@ -91,12 +81,7 @@ class EventCard extends Component {
     return (
       <Card className={classes.card}>
         <CardHeader
-          avatar={<Avatar aria-label="Meet Ups" className={classes.avatar} />}
-          action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
-          }
+          // avatar={<Avatar aria-label="Meet Ups" className={classes.avatar} />}
           title={this.props.meetup.name}
           subheader={
             this.props.meetup.isHolidayOrWeekend === true
@@ -111,13 +96,10 @@ class EventCard extends Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
           {/* Commenting out the below component because it is the expand icon */}
           <IconButton
             className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
+              [classes.expandOpen]: this.state.expanded
             })}
             onClick={this.handleExpandClick}
             aria-expanded={this.state.expanded}
@@ -165,12 +147,12 @@ class EventCard extends Component {
 }
 
 EventCard.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({ selectedCity: state.selectedCity });
+const mapStateToProps = state => ({ selectedCity: state.selectedCity });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,

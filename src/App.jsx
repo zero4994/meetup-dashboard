@@ -39,13 +39,6 @@ class App extends Component {
               : this.props.meetupCards}
           </Grid>
         </Grid>
-        {/* <Grid container spacing={24}>
-          <Grid item md />
-          <Grid item md={8}>
-            
-          </Grid>
-          <Grid item md />
-        </Grid> */}
       </div>
     );
   }

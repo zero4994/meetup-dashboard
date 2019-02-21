@@ -32,6 +32,12 @@ const renderMeetups = (meetupCards) => {
   };
 };
 
+const renderHolidaysOrWeekendMeetups = (holidayOrWeekendMeetups) => {
+  return {
+    type: "HOLIDAYS_ONLY",
+    holidayOrWeekendMeetups,
+  };
+};
 const storeWeather = (weather) => {
   console.log(`=========redux action========`,weather)
   return {
@@ -46,5 +52,6 @@ module.exports = {
   selectCity,
   storeMeetups,
   renderMeetups,
+  renderHolidaysOrWeekendMeetups,
   storeWeather,
 };

@@ -4,6 +4,7 @@ const initialState = {
   selectedCity: null,
   meetups: [],
   meetupCards: [],
+  holidayOrWeekendMeetups: [],
   weather: []
 };
 const reducer = (state = initialState, action) => {
@@ -43,9 +44,13 @@ const reducer = (state = initialState, action) => {
         ...stateChanges,
       };
     }
+    case "HOLIDAYS_ONLY": {
+      const stateChanges = {
+        holidayOrWeekendMeetups: action.holidayOrWeekendMeetups,
+      };
+    }
     case "STORE_WEATHER": {
       const stateChanges = { weather: action.weather };
-      console.log(`==========weather reducer======`, action)
       return {
         ...state,
         ...stateChanges,

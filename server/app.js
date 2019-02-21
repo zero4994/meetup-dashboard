@@ -68,6 +68,40 @@ const initializeServer = () => {
     }
   });
 
+  // weather(for 5days forecasts)
+  app.get("/api/weather/:country/:city", async (req, res) => {
+    const country = req.params.country;
+    const city = req.params.city;
+
+    try {
+      unirest.get(`https://community-open-weather-map.p.rapidapi.com/forecast?q=${city}%2C${country}`)
+      .header("X-RapidAPI-Key", process.env.API_KEY)
+      .end(function (result) {
+        // console.log(result.status, result.headers);
+        // console.log(result.body.list);
+        let resultObject = {};
+        let resultForecast = [];
+        for(key in result.body.list){
+          // console.log(result.body.list[key].dt_txt, result.body.list[key].weather);
+          if(result.body.list[key].dt_txt.endsWith("12:00:00")){
+            resultObject = {
+              date: result.body.list[key].dt_txt.substr(0,10),
+              wether_id: result.body.list[key].weather[0].id,
+              weather_group: result.body.list[key].weather[0].main,
+              description: result.body.list[key].weather[0].description,
+              icon: result.body.list[key].weather[0].icon
+            };
+            resultForecast.push(resultObject);
+          }
+        }
+        res.json(resultForecast);
+      });
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  })
+
   return app;
 };
 

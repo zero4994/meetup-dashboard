@@ -7,6 +7,7 @@ import {
   selectCity,
   storeMeetups,
   renderMeetups,
+  renderHolidaysOrWeekendMeetups,
 } from "./action";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -20,6 +21,8 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
+import "./SearchFilterBar.css";
+import Button from "@material-ui/core/Button";
 
 const suggestions = countries.map((country) => ({
   value: country.name,
@@ -74,6 +77,9 @@ const styles = (theme) => ({
   },
   divider: {
     height: 0,
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
 });
 
@@ -200,8 +206,15 @@ class SearchFilterBar extends React.Component {
         this.props.renderCities(cities);
       });
   };
-  handleSelectCity = () => async (value) => {
-    await this.props.selectCity(value);
+  handleInputCity = () => async (value) => {
+    try {
+      await this.props.selectCity(value);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  handleSelectCity = () => async () => {
+    //console.log("event=>", value);
     const query = this.props.selectedCity.state
       ? `?state=${this.props.selectedCity.state}`
       : "";
@@ -216,11 +229,17 @@ class SearchFilterBar extends React.Component {
         return this.props.meetups;
       })
       .then((meetups) => {
-        console.log(meetups.filter((meetups) => meetups.isHoliday));
         this.props.renderMeetups(
           meetups.map((meetup) => {
             return <EventCard meetup={meetup} />;
           })
+        );
+        this.props.renderHolidaysOrWeekendMeetups(
+          meetups
+            .filter((meetup) => meetup.isHolidayOrWeekend)
+            .map((meetup) => {
+              return <EventCard meetup={meetup} />;
+            })
         );
       });
   };
@@ -239,31 +258,47 @@ class SearchFilterBar extends React.Component {
     };
 
     return (
-      <div className={classes.root}>
-        <NoSsr>
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            options={suggestions}
-            components={components}
-            value={this.props.country}
-            onChange={this.handleSelectCountry()}
-            placeholder="Search a country"
-            isClearable
-          />
-          <div className={classes.divider} />
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            components={components}
-            options={this.props.cities}
-            value={this.props.selectedCity}
-            onChange={this.handleSelectCity()}
-            placeholder="Search a city"
-            isClearable
-          />
-          <div className={classes.divider} />
-        </NoSsr>
+      <div className="search-bar">
+        <div className={classes.root}>
+          <NoSsr>
+            <Select
+              classes={classes}
+              styles={selectStyles}
+              options={suggestions}
+              components={components}
+              value={this.props.country}
+              onChange={this.handleSelectCountry()}
+              placeholder="Search a country"
+              isClearable
+            />
+            <div className={classes.divider} />
+            <Select
+              classes={classes}
+              styles={selectStyles}
+              components={components}
+              options={this.props.cities}
+              value={this.props.selectedCity}
+              placeholder="Search a city"
+              isClearable
+              onChange={this.handleInputCity()}
+            />
+            <div className={classes.divider} />
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={this.handleSelectCity()}
+            >
+              Search
+            </Button>
+          </NoSsr>
+        </div>
+        <Button
+          variant="primary"
+          className={classes.button}
+          onClick={() => this.props.toggle()}
+        >
+          Holidays Or Weekends Only
+        </Button>
       </div>
     );
   }
@@ -300,6 +335,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   renderMeetups: (meetups) => {
     const action = renderMeetups(meetups);
+    dispatch(action);
+  },
+  renderHolidaysOrWeekendMeetups: (meetups) => {
+    const action = renderHolidaysOrWeekendMeetups(meetups);
     dispatch(action);
   },
 });

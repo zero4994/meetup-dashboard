@@ -16,20 +16,21 @@ class App extends Component {
       <div className="App">
         <Navbar />
 
-        <Grid container spacing={24} className="padding-top-2">
-          <Grid item md />
-          <Grid item md={8}>
+        <Grid container fluid="true" spacing={6} className="padding-top-2">
+          <Grid item md={3}>
             <SearchFilterBar />
           </Grid>
-          <Grid item md />
-        </Grid>
-        <Grid container spacing={24}>
-          <Grid item md />
           <Grid item md={8}>
             {this.props.meetupCards}
           </Grid>
-          <Grid item md />
         </Grid>
+        {/* <Grid container spacing={24}>
+          <Grid item md />
+          <Grid item md={8}>
+            
+          </Grid>
+          <Grid item md />
+        </Grid> */}
       </div>
     );
   }

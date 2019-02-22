@@ -7,10 +7,14 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import "./SearchFilterBar.css";
+import Divider from "@material-ui/core/Divider";
+import CardHeader from "@material-ui/core/CardHeader";
+import { connect } from "react-redux";
+import {} from "./action";
 
 const styles = {
   card: {
-    minWidth: 275
+    width: "10rem"
   },
   bullet: {
     display: "inline-block",
@@ -25,47 +29,49 @@ const styles = {
   }
 };
 
-function Weather(props) {
-  const { classes } = props;
-  const bull = <span className={classes.bullet}>•</span>;
-
-  return (
-    <div className="" style={{ "margin-top": "2rem" }}>
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            I am the weather forecast component
-          </Typography>
-          <Typography variant="h5" component="h2">
-            be
-            {bull}
-            nev
-            {bull}o{bull}
-            lent
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            adjective
-          </Typography>
-          <Typography component="p">
-            well meaning and kindly.
-            <br />
-            {'"a benevolent smile"'}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-      </Card>
-    </div>
-  );
+class Weather extends React.Component {
+  constructor(props) {
+    super();
+    // this.state = {
+    //   expanded: false
+    //  { classes } = props;
+    // const bull = <span className={classes.bullet}>•</span>;
+  }
+  render() {
+    console.log(this.props);
+    return (
+      <div className="" style={{ "margin-top": "2rem" }}>
+        <Card className="" style={{ width: "15rem" }}>
+          <CardHeader
+            // avatar={<Avatar aria-label="Meet Ups" className={classes.avatar} />}
+            subheader="WEATHER FORECAST"
+          />
+          <CardContent>
+            {this.props.weather.map(element => {
+              return (
+                <p>
+                  {" "}
+                  {element.date} - {element.description}{" "}
+                </p>
+              );
+            })}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 }
 
 Weather.propTypes = {
   classes: PropTypes.object.isRequired
 };
+const mapStateToProps = state => ({ weather: state.weather });
 
-export default withStyles(styles)(Weather);
+const mapDispatchToProps = dispatch => ({});
+
+//export default withStyles(styles)(Weather);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Weather));

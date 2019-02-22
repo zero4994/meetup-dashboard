@@ -36,7 +36,7 @@ class Navbar extends Component {
               fontFamily="Monospace"
               fontSize="h6.fontSize"
             >
-              <b>Meetups Dashboard</b>
+              <b>Raku Raku Meetu</b>
             </Typography>
           </Toolbar>
         </AppBar>

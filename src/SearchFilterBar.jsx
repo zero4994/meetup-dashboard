@@ -87,6 +87,7 @@ const styles = theme => ({
   "btn-search": {
     backgroundColor: "#1976d2",
     marginTop: "1rem",
+    marginBottom: "1rem",
     color: "#ffffff",
     "&:hover": {
       backgroundColor: "#136ac1 !important"

@@ -11,6 +11,7 @@ import Divider from "@material-ui/core/Divider";
 import CardHeader from "@material-ui/core/CardHeader";
 import { connect } from "react-redux";
 import {} from "./action";
+import moment from "moment";
 
 const styles = {
   card: {
@@ -49,10 +50,13 @@ class Weather extends React.Component {
           <CardContent>
             {this.props.weather.map(element => {
               return (
-                <p>
-                  {" "}
-                  {element.date} - {element.description}{" "}
-                </p>
+                <div>
+                  <p>
+                    {" "}
+                    {moment(element.date).format("ll")} - {element.description}{" "}
+                  </p>
+                  <Divider />
+                </div>
               );
             })}
           </CardContent>
